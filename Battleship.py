@@ -26,34 +26,41 @@ if __name__ == "__main__":
             shipLocationCoordinatesList.append(coordinate)
             break
 
-    print(shipLocationCoordinatesList)      
-
-    playerinput = True
     guesslist = []
 
-    while playerinput:
+    print(shipLocationCoordinatesList)
+
+    while True:
             playerGuess = input("Enter guess to hit a battleship letter for row and numbers for columns (ex. A3): ").upper()
-            
             if len(playerGuess) == 2 and playerGuess[0] in "ABCD" and playerGuess[1] in "1234":
+
                 letterchangerrows = {"A" : 0 , "B" : 1 , "C" : 2 , "D" : 3}
                 rowchanger = letterchangerrows[playerGuess[0]]
                 columnchanger = (int(playerGuess[1]) - 1)
-                playerGuessconvert = rowchanger + columnchanger
+
 
                 if playerGuess in guesslist:
-                    print("SPOT IS TAKEN, PICK ANOTHER SPOT.")
+                    print("This spot is occupied, please pick another. ")
                     continue
-
-                if playerGuess in shipLocationCoordinatesList:
+                
+                elif playerGuess not in guesslist:
                     guesslist.append(playerGuess)
-                    print(f"You have guessed: {playerGuess}")
-                    print("You hit and sunk a ship!")
-                    playerinput = False
-                    break
-                else:
-                    guesslist.append(playerGuess)
-                    print(f"You have guessed: {playerGuess}")
-                    print("You missed, Please try again.")
-                    
+                    if playerGuess in shipLocationCoordinatesList:
+                        print("You hit and sunk a ship!")
+                        gameBoard[rowchanger][columnchanger] = "H"
+                        print(gameBoard[0])
+                        print(gameBoard[1])
+                        print(gameBoard[2])
+                        print(gameBoard[3])
+                        break
+                    else:
+                        print("You missed. Please try again.")
+                        gameBoard[rowchanger][columnchanger] = "M"
+                        print(gameBoard[0])
+                        print(gameBoard[1])
+                        print(gameBoard[2])
+                        print(gameBoard[3])
+                        continue
             else:
-                print("Make sure you use letters A-D and a number 1-4.")
+                print("Please retry with the proper format. ")
+                continue
