@@ -28,8 +28,6 @@ if __name__ == "__main__":
 
     guesslist = []
 
-    print(shipLocationCoordinatesList)
-
     while True:
             playerGuess = input("Enter guess to hit a battleship letter for row and numbers for columns (ex. A3): ").upper()
             if len(playerGuess) == 2 and playerGuess[0] in "ABCD" and playerGuess[1] in "1234":
@@ -38,7 +36,6 @@ if __name__ == "__main__":
                 rowchanger = letterchangerrows[playerGuess[0]]
 
                 columnchanger = (int(playerGuess[1]) - 1)
-
 
                 if playerGuess in guesslist:
                     print("This spot is occupied, please pick another. ")
