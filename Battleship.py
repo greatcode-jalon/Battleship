@@ -21,42 +21,39 @@ if __name__ == "__main__":
     continueGame = True
     while continueGame:
         if gameBoard[generatedColumn][generatedRow] == 0:
-            letters = ["a", "b", "c", "d"]
+            letters = ["A", "B", "C", "D"]
             coordinate = f"{letters[generatedColumn]}{generatedRow + 1}"
             shipLocationCoordinatesList.append(coordinate)
             break
 
-    guesslist = []
-
     print(shipLocationCoordinatesList)      
 
-    while True:
-            playerGuess = input("Enter guess to hit a battleship letter for row and numbers for columns (ex. A3): ").lower()
-            if len(playerGuess) == 2 and playerGuess[0] in "abcd" and playerGuess[1] in "1234":
+    playerinput = True
+    guesslist = []
 
-                letterchangerrows = {"a" : 0 , "b" : 1 , "c" : 2 , "d" : 3}
+    while playerinput:
+            playerGuess = input("Enter guess to hit a battleship letter for row and numbers for columns (ex. A3): ").upper()
+            
+            if len(playerGuess) == 2 and playerGuess[0] in "ABCD" and playerGuess[1] in "1234":
+                letterchangerrows = {"A" : 0 , "B" : 1 , "C" : 2 , "D" : 3}
                 rowchanger = letterchangerrows[playerGuess[0]]
-
                 columnchanger = (int(playerGuess[1]) - 1)
-
                 playerGuessconvert = rowchanger + columnchanger
 
                 if playerGuess in guesslist:
-                    print("SPOT IS TAKE, PICK ANOTHER SPOT.")
+                    print("SPOT IS TAKEN, PICK ANOTHER SPOT.")
                     continue
-                guesslist.append(playerGuess)
-                print(f"You have guest {playerGuess}")
 
-                break
+                if playerGuess in shipLocationCoordinatesList:
+                    guesslist.append(playerGuess)
+                    print(f"You have guessed: {playerGuess}")
+                    print("You hit and sunk a ship!")
+                    playerinput = False
+                    break
+                else:
+                    guesslist.append(playerGuess)
+                    print(f"You have guessed: {playerGuess}")
+                    print("You missed, Please try again.")
+                    
             else:
-                print("Please retry")
-                continue
-    print(guesslist)
-    guesslist.append(playerGuess)
-
-    if playerGuess in shipLocationCoordinatesList:
-        print("You hit and sunk a ship!")
-
-    else:
-        print("You missed. Please try again.")
-
+                print("Make sure you use letters A-D and a number 1-4.")
