@@ -32,23 +32,34 @@ if __name__ == "__main__":
             letters = ["A", "B", "C", "D"]
             print(f"{letters[generatedColumn1]},{generatedRow1 + 1}")
             break
-        
-    while continueGame:
-        if gameBoard[generatedColumn2][generatedRow2] == 0:
-            letters = ["A", "B", "C", "D"]
-            print(f"{letters[generatedColumn2]},{generatedRow2 + 1}")
-            break
 
-    while continueGame:
-        if gameBoard[generatedColumn3][generatedRow3] == 0:
-            letters = ["A", "B", "C", "D"]
-            print(f"{letters[generatedColumn3]},{generatedRow3 + 1}")
-            break
+    guesslist = []      
 
-    while continueGame:
-        if gameBoard[generatedColumn4][generatedRow4] == 0:
-            letters = ["A", "B", "C", "D"]
-            print(f"{letters[generatedColumn4]},{generatedRow4 + 1}")
-            break
-                
-    playerGuess = input("Enter guess (ex. A,3): ")
+    while True:
+            playerGuess = input("Enter guess to hit a battleship letter for row and numbers for columns (ex. A3): ").lower()
+            if len(playerGuess) == 2 and playerGuess[0] in "abcd" and playerGuess[1] in "1234":
+
+                letterchangerrows = {"a" : 0 , "b" : 1 , "c" : 2 , "d" :3 }
+                rowchanger = letterchangerrows[playerGuess[0]]
+
+                columnchanger = str(int(playerGuess[1]) - 1)
+
+                playerGuessconvert = rowchanger + columnchanger
+
+                if playerGuess in guesslist:
+                    print("SPOT IS TAKE, PICK ANOTHER SPOT.")
+                    continue
+                guesslist.append(playerGuessconvert)
+                print(f"You have guest {playerGuessconvert}: GOOD HIT!! ")
+
+                break
+            else:
+                print("Please retry")
+
+    guesslist.append(playerGuess)
+
+
+
+
+
+
