@@ -27,21 +27,30 @@ if __name__ == "__main__":
             continue
     
     gameBoard = createBoard()
+    for row in gameBoard:
+        print(row)
 
     if gridSizeQuestion == 4:
         letters = ["A", "B", "C", "D"]
+        numbers = [1, 2, 3, 4]
     elif gridSizeQuestion == 5:
         letters = ["A", "B", "C", "D", "E"]
+        numbers = [1, 2, 3, 4, 5]
     elif gridSizeQuestion == 6:
         letters = ["A", "B", "C", "D", "E", "F"]
+        numbers = [1, 2, 3, 4, 5, 6]
     elif gridSizeQuestion == 7:
         letters = ["A", "B", "C", "D", "E", "F", "G",]
+        numbers = [1, 2, 3, 4, 5, 6, 7]
     elif gridSizeQuestion == 8:
         letters = ["A", "B", "C", "D", "E", "F", "G", "H",]
+        numbers = [1, 2, 3, 4, 5, 6, 7, 8]
     elif gridSizeQuestion == 9:
         letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I"]
+        numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
     elif gridSizeQuestion == 10:
         letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
+        numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
     generatedColumn = random.randint(0,(gridSizeQuestion - 1))
     generatedRow = random.randint(0,(gridSizeQuestion - 1))
@@ -56,31 +65,37 @@ if __name__ == "__main__":
     guesslist = []
 
     while True:
-            playerGuess = input("Enter guess to hit a battleship letter for row and numbers for columns (ex. A3): ").upper()
-            if len(playerGuess) == 2 and playerGuess[0] in letters and playerGuess[1] in range(0, (gridSizeQuestion - 1)):
+        playerGuess = input("Enter guess to hit a battleship letter for row and numbers for columns (ex. A3): ").upper()
+        if len(playerGuess) == 3 and int(playerGuess[1]) == 1 and int(playerGuess[2]) == 0:
+            length = 3
+        else:
+            length = 2
 
-                letterchangerrows = {"A" : 0 , "B" : 1 , "C" : 2 , "D" : 3 , "E" : 4 , "F" : 5 , "G" : 6 , "H" : 7 , "I" : 8 , "J" : 9}
-                rowchanger = letterchangerrows[playerGuess[0]]
+        if len(playerGuess) == length and playerGuess[0] in letters and int(playerGuess[1]) in numbers:
+            letterchangerrows = {"A" : 0 , "B" : 1 , "C" : 2 , "D" : 3 , "E" : 4 , "F" : 5 , "G" : 6 , "H" : 7 , "I" : 8 , "J" : 9}
+            rowchanger = letterchangerrows[playerGuess[0]]
 
-                columnchanger = (int(playerGuess[1]) - 1)
+            columnchanger = (int(playerGuess[1:]) - 1)
 
-                if playerGuess in guesslist:
-                    print("This spot is occupied, please pick another. ")
-                    continue
-                
-                elif playerGuess not in guesslist:
-                    guesslist.append(playerGuess)
-                    if playerGuess in shipLocationCoordinatesList:
-                        print("You hit and sunk a ship!")
-                        gameBoard[rowchanger][columnchanger] = "H"
-                        print(gameBoard)
-                        break
-
-                    else:
-                        print("You missed. Please try again.")
-                        gameBoard[rowchanger][columnchanger] = "M"
-                        print(gameBoard)
-                        continue
-            else:
-                print("Please retry with the proper format. ")
+            if playerGuess in guesslist:
+                print("This spot is occupied, please pick another. ")
                 continue
+
+            elif playerGuess not in guesslist:
+                guesslist.append(playerGuess)
+                if playerGuess in shipLocationCoordinatesList:
+                    print("You hit and sunk a ship!")
+                    gameBoard[rowchanger][columnchanger] = "H"
+                    for row in gameBoard:
+                        print(row)
+                    break
+
+                else:
+                    print("You missed. Please try again.")
+                    gameBoard[rowchanger][columnchanger] = "M"
+                    for row in gameBoard:
+                        print(row)
+                    continue
+        else:
+            print("Please retry with the proper format. ")
+            continue
