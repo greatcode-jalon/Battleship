@@ -11,6 +11,14 @@ def createBoard():
             boardRow.append(0)
     return columnRow
 
+def printboard(board): #Help from Michael Do
+    for row in board:
+        print()
+        for number in row:
+            print(number, end="\t")
+    print()
+
+
 if __name__ == "__main__":
     shipLocationCoordinatesList = []
 
@@ -23,13 +31,13 @@ if __name__ == "__main__":
                 print("Please enter your board dimensions with a number 4-10. ")
                 continue
         except:
-            print("Invalid board dimensions. Please try again.")
+            print("Please enter a number 4-10.")
             continue
     
-    gameBoard = createBoard()
+    playerGameBoard = createBoard()
+    computerGameBoard = createBoard()
 
-    for row in gameBoard:
-        print(row)
+    printboard(playerGameBoard)
 
     if gridSizeQuestion == 4:
         letters = ["A", "B", "C", "D"]
@@ -58,7 +66,7 @@ if __name__ == "__main__":
 
     numships = gridSizeQuestion // 2
 
-    for x in range(numships):
+    for x in range(numships - 1):
 
         placementoption = input("Would you rather place your ships randomly or manually? ")
 
@@ -75,19 +83,19 @@ if __name__ == "__main__":
             colindex = numcol - 1
 
 
-            gameBoard[rowind][colindex] = "X"
+            playerGameBoard[rowind][colindex] = "X"
 
 
-            for row in gameBoard:
-                print(row)
+            printboard(playerGameBoard)
+
 
         elif placementoption == "randomly":
             while True:
                 generatedColumn = random.randint(0,(gridSizeQuestion - 1))
                 generatedRow = random.randint(0,(gridSizeQuestion - 1))
-                if gameBoard[generatedRow][generatedColumn] == 0:
+                if playerGameBoard[generatedRow][generatedColumn] == 0:
                     
-                    gameBoard[generatedRow][generatedColumn] = "X"
+                    playerGameBoard[generatedRow][generatedColumn] = "X"
                     
                     letter = alphabet[generatedRow]
                     number = generatedColumn + 1
@@ -95,8 +103,7 @@ if __name__ == "__main__":
                     
                     shipLocationCoordinatesList.append(coordinate)
                     print(f"Your ship was placed at {coordinate}")
-                    for row in gameBoard:
-                        print(row)
+                    printboard(playerGameBoard)
                     break
                     
 
@@ -111,7 +118,7 @@ if __name__ == "__main__":
             
             if coordinate not in shipLocationCoordinatesList:
                 shipLocationCoordinatesList.append(coordinate)
-                gameBoard[generatedRow][generatedColumn] = "X"
+                playerGameBoard[generatedRow][generatedColumn] = "X"
                 break
 
     guesslist = []
@@ -119,11 +126,11 @@ if __name__ == "__main__":
     while True:
             total += 1
             if total == 6:
-                print("You are out of guesses.")
+                print("\nYou are out of guesses.")
                 break
                 continue
 
-            playerGuess = input("Enter guess to hit a battleship letter for row and numbers for columns (ex. A3): ").upper()
+            playerGuess = input("\nEnter guess to hit a battleship letter for row and numbers for columns (ex. A3): ").upper().strip()
             if len(playerGuess) == 3 and int(playerGuess[1]) == 1 and int(playerGuess[2]) == 0:
                 length = 3
             else:
@@ -135,23 +142,21 @@ if __name__ == "__main__":
                 columnchanger = (int(playerGuess[1:]) - 1)
 
             if playerGuess in guesslist:
-                print("This spot is occupied, please pick another. ")
+                print("PICK ANOTHER SPOT. ")
                 continue
 
             elif playerGuess not in guesslist:
                 guesslist.append(playerGuess)
                 if playerGuess in shipLocationCoordinatesList:
-                    print("You hit and sunk a ship!")
-                    gameBoard[rowchanger][columnchanger] = "H"
-                    for row in gameBoard:
-                        print(row)
+                    print("YOU HAVE SUNK A SHIP. ")
+                    playerGameBoard[rowchanger][columnchanger] = "H"
+                    printboard(playerGameBoard)
                     break
 
                 else:
-                    print("You missed. Please try again.")
-                    gameBoard[rowchanger][columnchanger] = "M"
-                    for row in gameBoard:
-                        print(row)
+                    print("YOU MISSED TRY AGAIN.\n")
+                    playerGameBoard[rowchanger][columnchanger] = "M"
+                    printboard(playerGameBoard)
                     continue
             
 
