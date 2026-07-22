@@ -40,27 +40,16 @@ if __name__ == "__main__":
 
     printboard(playerGameBoard)
 
-    if gridSizeQuestion == 4:
-        letters = ["A", "B", "C", "D"]
-        numbers = ['1', '2', '3', '4']
-    elif gridSizeQuestion == 5:
-        letters = ["A", "B", "C", "D", "E"]
-        numbers = ['1', '2', '3', '4', '5']
-    elif gridSizeQuestion == 6:
-        letters = ["A", "B", "C", "D", "E", "F"]
-        numbers = ['1', '2', '3', '4', '5', '6']
-    elif gridSizeQuestion == 7:
-        letters = ["A", "B", "C", "D", "E", "F", "G"]
-        numbers = ['1', '2', '3', '4', '5', '6', '7']
-    elif gridSizeQuestion == 8:
-        letters = ["A", "B", "C", "D", "E", "F", "G", "H"]
-        numbers = ['1', '2', '3', '4', '5', '6', '7', '8']
-    elif gridSizeQuestion == 9:
-        letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I"]
-        numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
-    elif gridSizeQuestion == 10:
-        letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
-        numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+    letters = []
+    numbers = []
+
+    for num in range(gridSizeQuestion): 
+        letters.append(chr(65 + num))
+
+    for num in range(1, gridSizeQuestion + 1):
+        numbers.append(str(num))
+    
+
 
     playerGeneratedColumn = random.randint(0,(gridSizeQuestion - 1))
     playerGeneratedRow = random.randint(0,(gridSizeQuestion - 1))
