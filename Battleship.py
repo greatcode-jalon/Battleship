@@ -98,14 +98,19 @@ if __name__ == "__main__":
         else:
             length = 2
 
+        if playerGuess in playerGuesslist:
+            printboard
+
         if len(playerGuess) == length and playerGuess[0] in letters and int(playerGuess[1]) in numbers:
             letterchangerrows = {"A" : 0 , "B" : 1 , "C" : 2 , "D" : 3 , "E" : 4 , "F" : 5 , "G" : 6 , "H" : 7 , "I" : 8 , "J" : 9}
             playerRowchanger = letterchangerrows[playerGuess[0]]
             playerColumnchanger = (int(playerGuess[1:]) - 1)
-
-            if playerGuess in playerGuesslist:
-                print("Spot already taken, pick another. ")
+        if playerGuess in playerGuesslist:
+                print("PICK ANOTHER SPOT. ")
                 continue
+
+        elif playerGuess not in playerGuesslist:
+            playerGuesslist.append(playerGuess)
         else:
             print("Please retry with the proper format. ")
             continue
