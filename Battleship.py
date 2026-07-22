@@ -42,25 +42,25 @@ if __name__ == "__main__":
 
     if gridSizeQuestion == 4:
         letters = ["A", "B", "C", "D"]
-        numbers = [1, 2, 3, 4]
+        numbers = ['1', '2', '3', '4']
     elif gridSizeQuestion == 5:
         letters = ["A", "B", "C", "D", "E"]
-        numbers = [1, 2, 3, 4, 5]
+        numbers = ['1', '2', '3', '4', '5']
     elif gridSizeQuestion == 6:
         letters = ["A", "B", "C", "D", "E", "F"]
-        numbers = [1, 2, 3, 4, 5, 6]
+        numbers = ['1', '2', '3', '4', '5', '6']
     elif gridSizeQuestion == 7:
         letters = ["A", "B", "C", "D", "E", "F", "G"]
-        numbers = [1, 2, 3, 4, 5, 6, 7]
+        numbers = ['1', '2', '3', '4', '5', '6', '7']
     elif gridSizeQuestion == 8:
         letters = ["A", "B", "C", "D", "E", "F", "G", "H"]
-        numbers = [1, 2, 3, 4, 5, 6, 7, 8]
+        numbers = ['1', '2', '3', '4', '5', '6', '7', '8']
     elif gridSizeQuestion == 9:
         letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I"]
-        numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
     elif gridSizeQuestion == 10:
         letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
-        numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
 
     playerGeneratedColumn = random.randint(0,(gridSizeQuestion - 1))
     playerGeneratedRow = random.randint(0,(gridSizeQuestion - 1))
@@ -101,54 +101,55 @@ if __name__ == "__main__":
         if playerGuess in playerGuesslist:
             printboard
 
-        if len(playerGuess) == length and playerGuess[0] in letters and int(playerGuess[1]) in numbers:
+        if len(playerGuess) == length and playerGuess[0] in letters and str(playerGuess[1:]) in numbers:
             letterchangerrows = {"A" : 0 , "B" : 1 , "C" : 2 , "D" : 3 , "E" : 4 , "F" : 5 , "G" : 6 , "H" : 7 , "I" : 8 , "J" : 9}
             playerRowchanger = letterchangerrows[playerGuess[0]]
             playerColumnchanger = (int(playerGuess[1:]) - 1)
-        if playerGuess in playerGuesslist:
+        
+            if playerGuess in playerGuesslist:
                 print("PICK ANOTHER SPOT. ")
                 continue
 
-        elif playerGuess not in playerGuesslist:
             playerGuesslist.append(playerGuess)
-        else:
-            print("Please retry with the proper format. ")
-            continue
 
-        while True:
-            computerGuessColumn = random.randint(0,(gridSizeQuestion - 1))
-            computerGuessRow = random.randint(0,(gridSizeQuestion - 1))
-            computerGuess = f"{letters[computerGuessRow]}{computerGuessColumn + 1}"
-            if computerGuess in computerGuesslist:
-                continue 
-            elif computerGuess not in computerGuesslist:
-                computerGuesslist.append(computerGuess)
+            while True:
+                computerGuessColumn = random.randint(0,(gridSizeQuestion - 1))
+                computerGuessRow = random.randint(0,(gridSizeQuestion - 1))
+                computerGuess = f"{letters[computerGuessRow]}{computerGuessColumn + 1}"
+                if computerGuess in computerGuesslist:
+                    continue 
+                elif computerGuess not in computerGuesslist:
+                    computerGuesslist.append(computerGuess)
+                    break
+
+
+            if playerGuess in computerShipLocationCoordinatesList:
+                print("YOU HAVE SUNK A SHIP.\n")
+                computerGameBoard[playerRowchanger][playerColumnchanger] = "H"
+                print("--- COMPUTER BOARD ---")
+                printboard(computerGameBoard)
+                break 
+
+            elif playerGuess not in computerShipLocationCoordinatesList:
+                print("YOU MISSED TRY AGAIN.\n")
+                computerGameBoard[playerRowchanger][playerColumnchanger] = "M"
+                print("--- COMPUTER BOARD ---")
+                printboard(computerGameBoard)
+
+            if computerGuess in playerShipLocationCoordinatesList:
+                print("CPU: HIT AND SUNK YOUR SHIP!!\n")
+                playerGameBoard[computerGuessRow][computerGuessColumn] = "H"
+                print("--- PLAYER BOARD ---")
+                printboard(playerGameBoard)
                 break
 
+            elif computerGuess not in playerShipLocationCoordinatesList:
+                print("CPU: MISSED \n")
+                playerGameBoard[computerGuessRow][computerGuessColumn] = "M"
+                print("--- PLAYER BOARD ---")
+                printboard(playerGameBoard)
+                continue
 
-        if playerGuess in computerShipLocationCoordinatesList:
-            print("YOU HAVE SUNK A SHIP.\n")
-            computerGameBoard[playerRowchanger][playerColumnchanger] = "H"
-            print("--- COMPUTER BOARD ---")
-            printboard(computerGameBoard) #maybe remove this later
-            break 
-
-        elif playerGuess not in computerShipLocationCoordinatesList:
-            print("YOU MISSED TRY AGAIN.\n")
-            computerGameBoard[playerRowchanger][playerColumnchanger] = "M"
-            print("--- COMPUTER BOARD ---")
-            printboard(computerGameBoard)
-
-        if computerGuess in playerShipLocationCoordinatesList:
-            print("CPU: HIT AND SUNK YOUR SHIP!!\n")
-            playerGameBoard[computerGuessRow][computerGuessColumn] = "H"
-            print("--- PLAYER BOARD ---")
-            printboard(playerGameBoard)
-            break
-
-        elif computerGuess not in playerShipLocationCoordinatesList:
-            print("CPU: MISSED \n")
-            playerGameBoard[computerGuessRow][computerGuessColumn] = "M"
-            print("--- PLAYER BOARD ---")
-            printboard(playerGameBoard)
+        else:
+            print("Please retry with the proper format. ")
             continue
