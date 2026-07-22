@@ -20,9 +20,12 @@ def printboard(board): #Help from Michael Do
 
 
 if __name__ == "__main__":
+    listforplayerships = []
+    listforcomputerships = []
     shipLocationCoordinatesList = []
     alphabet = "ABCDEFGHIJKLMNOPQRSTUVWUXYZ"
-
+    computershipssunk = 0
+    playershipssunk = 0
     manualList = []
     while True:
         try:
@@ -39,6 +42,7 @@ if __name__ == "__main__":
     playerGameBoard = createBoard()
     computerGameBoard = createBoard()
 
+    print("\n--- PLAYER BOARD ---")
     printboard(playerGameBoard)
 
     if gridSizeQuestion == 4:
@@ -106,63 +110,106 @@ if __name__ == "__main__":
             numcol = int(colplacement)
             colindex = numcol - 1
             playerGameBoard[rowind][colindex] = "X"
-
+            print("\n--- PLAYER BOARD ---")
             printboard(playerGameBoard)
 
-        elif placementoption == "randomly":
-            while True:
-                generatedColumn = random.randint(0,(gridSizeQuestion - 1))
-                generatedRow = random.randint(0,(gridSizeQuestion - 1))
-                if playerGameBoard[generatedRow][generatedColumn] == 0:
-                    
-                    playerGameBoard[generatedRow][generatedColumn] = "X"
-                    
-                    letter = alphabet[generatedRow]
-                    number = generatedColumn + 1
-                    coordinate = f"{letter}{number}"
-                    
-                    shipLocationCoordinatesList.append(coordinate)
-                    print(f"Your ship was placed at {coordinate}")
-                    printboard(playerGameBoard)
-                    break
-                    
-    guesslist = []
-    total = 0
-    while True:
-            total += 1
-            if total == 6:
-                print("\nYou are out of guesses.")
+
+    for ship in range(numships):
+        while True:
+            generatedColumn = random.randint(0, (gridSizeQuestion - 1))
+            generatedRow = random.randint(0, (gridSizeQuestion - 1))
+            letter = alphabet[generatedRow]
+            number = generatedColumn + 1
+            coordinate = f"{letter}{number}"
+            if coordinate not in listforcomputerships:
+                listforcomputerships.append(coordinate)
                 break
 
+    print("\n--- GAME START ---")               
+    playerguesslist = []
+    computerguesslist = []
+    computershipssunk = 0
+    playershipssunk = 0
+    
+    while True:
+        while True:
             playerGuess = input("\nEnter guess to hit a battleship letter for row and numbers for columns (ex. A3): ").upper().strip()
             if len(playerGuess) == 3 and int(playerGuess[1]) == 1 and int(playerGuess[2]) == 0:
                 length = 3
             else:
                 length = 2
 
-            if len(playerGuess) == length and playerGuess[0] in letters and int(playerGuess[1]) in numbers:
+            if len(playerGuess) == length and playerGuess[0] in letters and int(playerGuess[1:]) in numbers:
                 letterchangerrows = {"A" : 0 , "B" : 1 , "C" : 2 , "D" : 3 , "E" : 4 , "F" : 5 , "G" : 6 , "H" : 7 , "I" : 8 , "J" : 9}
                 rowchanger = letterchangerrows[playerGuess[0]]
                 columnchanger = (int(playerGuess[1:]) - 1)
+            else:
+                print("CORRECT YOUR INPUT (EX. D3) ")
+                continue
 
-            if playerGuess in guesslist:
+            if playerGuess in playerguesslist:
                 print("PICK ANOTHER SPOT. ")
                 continue
-
-            elif playerGuess not in guesslist:
-                guesslist.append(playerGuess)
-                if playerGuess in shipLocationCoordinatesList:
+            else:
+                playerguesslist.append(playerGuess)
+                print(f"User's Guess: {playerGuess}")
+                if playerGuess in listforcomputerships:
                     print("YOU HAVE SUNK A SHIP. ")
-                    playerGameBoard[rowchanger][columnchanger] = "H"
+                    computerGameBoard[rowchanger][columnchanger] = "H"
+                    computershipssunk += 1
+                    print("\n--- PLAYER BOARD ---")
                     printboard(playerGameBoard)
+                    print("\n--- COMPUTER BOARD ---")
+                    printboard(computerGameBoard)
                     break
-
                 else:
                     print("YOU MISSED TRY AGAIN.\n")
-                    playerGameBoard[rowchanger][columnchanger] = "M"
+                    computerGameBoard[rowchanger][columnchanger] = "M"
+                    print("\n--- PLAYER BOARD ---")
                     printboard(playerGameBoard)
-                    continue
+                    print("\n--- COMPUTER BOARD ---")
+                    printboard(computerGameBoard)
+                    break
 
-            else:
-                print("Please retry with the proper format. ")
-                continue
+        if computershipssunk == numships:
+            break
+
+        while True:
+            rowindc = random.randint(0, gridSizeQuestion - 1)
+            colindc = random.randint(0, gridSizeQuestion - 1)
+            computerletter = alphabet[rowindc]
+            numcomputer = colindc + 1
+            computerGuess = f"{computerletter}{numcomputer}"
+
+            if computerGuess not in computerguesslist:
+                computerguesslist.append(computerGuess)
+                print(f"\nComputer's Guess: {computerGuess}")
+                
+                if computerGuess in listforplayerships:
+                    print("CPU: HIT AND SUNK YOUR SHIP!! ")
+                    playerGameBoard[rowindc][colindc] = "H"
+                    playershipssunk += 1
+                    print("\n--- PLAYER BOARD ---")
+                    printboard(playerGameBoard)
+                    break
+                else:
+                    print("CPU: MISSED ")
+                    playerGameBoard[rowindc][colindc] = "M"
+                    print("\n--- PLAYER BOARD ---")
+                    printboard(playerGameBoard)
+                    break
+                    
+        if playershipssunk == numships:
+            break
+
+        if len(playerguesslist) == 5 and len(computerguesslist) == 5:
+            break
+                
+    if playershipssunk == numships:
+        print(f"\nTHE CPU HAVE WON THE GAME!! CPU SUNK ALL {numships} ships. ")
+
+    elif computershipssunk == numships:
+        print(f"\nYOU HAVE WON THE GAME!! YOU SUNK ALL {numships} ships. ")
+
+    else:
+        print("\nNO MORE GUESSES")
