@@ -21,7 +21,9 @@ def printboard(board): #Help from Michael Do
 
 if __name__ == "__main__":
     shipLocationCoordinatesList = []
+    alphabet = "ABCDEFGHIJKLMNOPQRSTUVWUXYZ"
 
+    manualList = []
     while True:
         try:
             gridSizeQuestion = int(input("Enter a number, 4-10, to define the size of the board (ex, 5 = 5x5 board): "))
@@ -66,28 +68,46 @@ if __name__ == "__main__":
 
     numships = gridSizeQuestion // 2
 
-    for x in range(numships - 1):
+    for x in range(numships):
+        while True:
+            placementoption = input("\nWould you rather place your ships randomly or manually? ").lower().strip()
+            if placementoption == "randomly" or placementoption == "manually":
+                break
+            print("Please reinput randomly or manually. ")
 
-        placementoption = input("Would you rather place your ships randomly or manually? ")
-
-        alphabet = "ABCDEFGHIJKLMNOPQRSTUVWUXYZ"
 
         if placementoption == "manually":
-            shipplacement = input("Where would you like to place your ship (ex. A3 rows | columns): ")
+            while True:
+                shipplacement = input("Where would you like to place your ship (ex. A3 rows | columns): ").upper().strip()
+                if len(shipplacement) == 3 and int(shipplacement[1]) == 1 and int(shipplacement[2]) == 0:
+                    length = 3
+                else:
+                    length = 2
+                
+                if shipplacement in manualList:
+                    print("This spot is occupied, please pick another. ")
+                    continue
+
+                elif len(shipplacement) == length and shipplacement[0] in letters and int(shipplacement[1]) in numbers:
+                    letterchangerrows = {"A" : 0 , "B" : 1 , "C" : 2 , "D" : 3 , "E" : 4 , "F" : 5 , "G" : 6 , "H" : 7 , "I" : 8 , "J" : 9}
+                    rowchanger = letterchangerrows[shipplacement[0]]
+                    columnchanger = (int(shipplacement[1:]) - 1)
+                    manualList.append(shipplacement)
+                    print(manualList)
+                    break
+
+                else:
+                    print("Please retry with the proper format. ")
+                    continue
+
             rowplacement = shipplacement[0]
             colplacement = shipplacement[1:]
-
             rowind = alphabet.index(rowplacement)
-
             numcol = int(colplacement)
             colindex = numcol - 1
-
-
             playerGameBoard[rowind][colindex] = "X"
 
-
             printboard(playerGameBoard)
-
 
         elif placementoption == "randomly":
             while True:
@@ -106,21 +126,6 @@ if __name__ == "__main__":
                     printboard(playerGameBoard)
                     break
                     
-
-        
-
-        continueGame = True
-        while continueGame:
-            generatedRow = random.randint(0, gridSizeQuestion - 1)
-            generatedColumn = random.randint(0, gridSizeQuestion - 1)
-            
-            coordinate = f"{letters[generatedColumn]}{generatedRow + 1}"
-            
-            if coordinate not in shipLocationCoordinatesList:
-                shipLocationCoordinatesList.append(coordinate)
-                playerGameBoard[generatedRow][generatedColumn] = "X"
-                break
-
     guesslist = []
     total = 0
     while True:
@@ -128,7 +133,6 @@ if __name__ == "__main__":
             if total == 6:
                 print("\nYou are out of guesses.")
                 break
-                continue
 
             playerGuess = input("\nEnter guess to hit a battleship letter for row and numbers for columns (ex. A3): ").upper().strip()
             if len(playerGuess) == 3 and int(playerGuess[1]) == 1 and int(playerGuess[2]) == 0:
@@ -158,8 +162,7 @@ if __name__ == "__main__":
                     playerGameBoard[rowchanger][columnchanger] = "M"
                     printboard(playerGameBoard)
                     continue
-            
 
             else:
                 print("Please retry with the proper format. ")
-                continue    
+                continue
