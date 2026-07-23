@@ -226,15 +226,22 @@ if __name__ == "__main__":
 
 
             if playerGuess in computerShipLocationCoordinatesList:
-                print("YOU HAVE SUNK A SHIP.\n")
-                computerGameBoard[playerRowchanger][playerColumnchanger] = "H"
-                print("--- COMPUTER BOARD ---")
-                printboard(computerGameBoard)
-                if "X" in computerGameBoard:
-                    continue
-                else:
+                if playerGuess == computerShipLocationCoordinatesList[0]:
+                    print("YOU HIT & SUNK THE COMPUTER DINGHY.\n")
+                    computerGameBoard[playerRowchanger][playerColumnchanger] = "H"
+                    print("--- COMPUTER BOARD ---")
+                    printboard(computerGameBoard)
+                elif playerGuess in computerShipLocationCoordinatesList[1]:
+                    if playerGuess == computerShipLocationCoordinatesList[1][0] or playerGuess == computerShipLocationCoordinatesList[1][1]:
+                        print("YOU HIT THE COMPUTER DESTROYER.\n")
+                    if playerGuess == computerShipLocationCoordinatesList[1][0] and playerGuess == computerShipLocationCoordinatesList[1][1]:
+                        print("YOU SUNK THE COMPUTER DESTROYER.\n")
+                        continue
+                if playerGuess == computerShipLocationCoordinatesList[1][0] and playerGuess == computerShipLocationCoordinatesList[1][1] and playerGuess == computerShipLocationCoordinatesList[0]:
                     print("You have sunk all ships. YOU WIN!")
-                    break 
+                    break
+                else:
+                    continue
 
             elif playerGuess not in computerShipLocationCoordinatesList:
                 print("YOU MISSED TRY AGAIN.\n")
@@ -243,15 +250,22 @@ if __name__ == "__main__":
                 printboard(computerGameBoard)
 
             if computerGuess in playerShipLocationCoordinatesList:
-                print("CPU: HIT AND SUNK YOUR SHIP!!\n")
-                playerGameBoard[computerGuessRow][computerGuessColumn] = "H"
-                print("--- PLAYER BOARD ---")
-                printboard(playerGameBoard)
-                if "X" in playerGameBoard:
-                    continue
-                else:
+                if computerGuess == playerShipLocationCoordinatesList[0]:
+                    print("THE CPU HIT & SUNK YOUR DINGHY.\n")
+                    computerGameBoard[playerRowchanger][playerColumnchanger] = "H"
+                    print("--- COMPUTER BOARD ---")
+                    printboard(computerGameBoard)
+                elif computerGuess in playerShipLocationCoordinatesList[1]:
+                    if computerGuess == playerShipLocationCoordinatesList[1][0] or computerGuess == playerShipLocationCoordinatesList[1][1]:
+                        print("THE CPU HIT YOUR DESTROYER.\n")
+                    if computerGuess == playerShipLocationCoordinatesList[1][0] and computerGuess == playerShipLocationCoordinatesList[1][1]:
+                        print("THE CPU SUNK YOUR DESTROYER.\n")
+                        continue
+                if computerGuess == playerShipLocationCoordinatesList[1][0] and computerGuess == playerShipLocationCoordinatesList[1][1] and computerGuess == playerShipLocationCoordinatesList[0]:
                     print("You have sunk all ships. YOU WIN!")
                     break
+                else:
+                    continue
 
             elif computerGuess not in playerShipLocationCoordinatesList:
                 print("CPU: MISSED \n")
