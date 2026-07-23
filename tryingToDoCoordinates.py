@@ -1,5 +1,3 @@
-#Names: Noah C + Ja'Lon S
-
 import random
 
 def createBoard():
@@ -176,9 +174,9 @@ if __name__ == "__main__":
         number = computerStartCoordinatesList[0][1] + 1
         computerCoordinate = f"{letter}{number}"
         computerShipLocationCoordinatesList.append(computerCoordinate)
-        print(f"\nComputer dignhy was placed at {computerCoordinate}")
+        print(f"\nPlayer dignhy was placed at {computerCoordinate}")
 
-    if computerGameBoard[computerStartCoordinatesList[1][0][0]][computerStartCoordinatesList[1][0][1]] == 0 and computerGameBoard[computerStartCoordinatesList[1][1][0]][computerStartCoordinatesList[1][1][1]] == 0:
+    if computerGameBoard[computerStartCoordinatesList[1][0][0]][computerStartCoordinatesList[1][0][1]] == 0 and computerGameBoard[computerStartCoordinatesList[1][1][0]][playerStartCoordinatesList[1][1][1]] == 0:
         computerGameBoard[computerStartCoordinatesList[1][0][0]][computerStartCoordinatesList[1][0][1]] = "X"
         computerGameBoard[computerStartCoordinatesList[1][1][0]][computerStartCoordinatesList[1][1][1]] = "X"
         letter1 = chr(65 + computerStartCoordinatesList[1][0][0])
@@ -189,7 +187,7 @@ if __name__ == "__main__":
         computerCoordinate2 = f"{letter2}{number2}"
         computerShipLocationCoordinatesList.append(computerCoordinate1)
         computerShipLocationCoordinatesList.append(computerCoordinate2)
-        print(f"\nComputer destroyer was placed at {computerCoordinate1} and {computerCoordinate2}")
+        print(f"\nPlayer destroyer was placed at {computerCoordinate1} and {computerCoordinate2}")
 
 
     print("\n== PLAYER BOARD ==")
