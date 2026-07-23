@@ -37,15 +37,8 @@ if __name__ == "__main__":
     playerGameBoard = createBoard()
     computerGameBoard = createBoard()
 
-    letters = []
-    numbers = []
-
-    for num in range(gridSizeQuestion): 
-        letters.append(chr(65 + num))
-
-    for num in range(1, gridSizeQuestion + 1):
-        numbers.append(str(num))
-
+    letters = [chr(65+number) for number in range(gridSizeQuestion)] #  Help from Micheal Do
+    numbers = [number+1 for number in range(gridSizeQuestion)]
 
     playerPossibleShipsList = [None, "dinghy", "destroyer"]
     playerShipCounter = 0

@@ -1,0 +1,1 @@
+letters = [number for number in range(gridSizeQuestion)]
