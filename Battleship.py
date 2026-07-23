@@ -174,10 +174,10 @@ if __name__ == "__main__":
     if computerGameBoard[computerStartCoordinatesList[1][0][0]][computerStartCoordinatesList[1][0][1]] == 0 and computerGameBoard[computerStartCoordinatesList[1][1][0]][computerStartCoordinatesList[1][1][1]] == 0:
         computerGameBoard[computerStartCoordinatesList[1][0][0]][computerStartCoordinatesList[1][0][1]] = "X"
         computerGameBoard[computerStartCoordinatesList[1][1][0]][computerStartCoordinatesList[1][1][1]] = "X"
-        letter1 = chr(65 + computerStartCoordinatesList)
-        number1 = computerStartCoordinatesList + 1
-        letter2 = chr(65 + computerStartCoordinatesList)
-        number2 = computerStartCoordinatesList + 1
+        letter1 = chr(65 + computerStartCoordinatesList[1][0][0])
+        number1 = computerStartCoordinatesList[1][0][1] + 1
+        letter2 = chr(65 + computerStartCoordinatesList[1][1][0])
+        number2 = computerStartCoordinatesList[1][1][1] + 1
         computerCoordinate1 = f"{letter1}{number1}"
         computerCoordinate2 = f"{letter2}{number2}"
         computerShipLocationCoordinatesList.append(computerCoordinate1)
@@ -207,9 +207,9 @@ if __name__ == "__main__":
             print("PICK ANOTHER SPOT. ")
             continue
 
-        if len(playerGuess) == length and playerGuess in letters and playerGuess[1:].isdigit() and int(playerGuess[1:]) in numbers:
+        if len(playerGuess) == length and playerGuess[0] in letters and playerGuess[1:].isdigit() and int(playerGuess[1:]) in numbers:
             letterchangerrows = {"A" : 0 , "B" : 1 , "C" : 2 , "D" : 3 , "E" : 4 , "F" : 5 , "G" : 6 , "H" : 7 , "I" : 8 , "J" : 9}
-            playerRowchanger = letterchangerrows[playerGuess]
+            playerRowchanger = letterchangerrows[playerGuess[0]]
             playerColumnchanger = (int(playerGuess[1:]) - 1)
 
             playerGuesslist.append(playerGuess)
@@ -226,7 +226,7 @@ if __name__ == "__main__":
 
             if playerGuess in computerShipLocationCoordinatesList:
                 computerGameBoard[playerRowchanger][playerColumnchanger] = "H"
-                if playerGuess == computerShipLocationCoordinatesList:
+                if playerGuess == computerShipLocationCoordinatesList[0]:
                     print("YOU HIT & SUNK THE COMPUTER DINGHY.\n")
                 elif playerGuess in computerShipLocationCoordinatesList[1:]:
                     print("YOU HIT THE COMPUTER DESTROYER.\n")
@@ -251,7 +251,7 @@ if __name__ == "__main__":
 
             if computerGuess in playerShipLocationCoordinatesList:
                 playerGameBoard[computerGuessRow][computerGuessColumn] = "H"
-                if computerGuess == playerShipLocationCoordinatesList:
+                if computerGuess == playerShipLocationCoordinatesList[0]:
                     print("THE CPU HIT & SUNK YOUR DINGHY.\n")
                 elif computerGuess in playerShipLocationCoordinatesList[1:]:
                     print("THE CPU HIT YOUR DESTROYER.\n")
