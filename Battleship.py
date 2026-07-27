@@ -37,155 +37,150 @@ if __name__ == "__main__":
     playerGameBoard = createBoard()
     computerGameBoard = createBoard()
 
-    letters = [chr(65+number) for number in range(gridSizeQuestion)] #  Help from Michael Do ***** 5 star GREAT CODE
-    numbers = [number+1 for number in range(gridSizeQuestion)]
-
     playerPossibleShipsList = [None, "dinghy", "destroyer"]
     playerShipCounter = 0
     playerStartCoordinatesList = []
     playerShipNamesList = []
 
+    while True:
+        playerShipCounter = 0
+        playerStartCoordinatesList = []
+        playerShipNamesList = []
 
-    for ship in range(2):
         playerShipName = playerPossibleShipsList[playerShipCounter]
         playerShipCounter += 1
         playerDestroyerCoordinate = []
 
+        playerGeneratedColumn = random.randint(0,(gridSizeQuestion - 1))
+        playerGeneratedRow = random.randint(0,(gridSizeQuestion - 1))
+        playerDinghyStartCoordinate = []
+        playerDinghyStartCoordinate.append(playerGeneratedRow)
+        playerDinghyStartCoordinate.append(playerGeneratedColumn)
+        playerStartCoordinatesList.append(playerDinghyStartCoordinate)
+        playerShipNamesList.append("dinghy")
 
-        if playerShipCounter == 1:
-            playerGeneratedColumn = random.randint(0,(gridSizeQuestion - 1))
-            playerGeneratedRow = random.randint(0,(gridSizeQuestion - 1))
-            playerDinghyStartCoordinate = []
-            playerDinghyStartCoordinate.append(playerGeneratedRow)
-            playerDinghyStartCoordinate.append(playerGeneratedColumn)
-            playerStartCoordinatesList.append(playerDinghyStartCoordinate)
-            playerShipNamesList.append("dinghy")
+        playerShipName = playerPossibleShipsList[playerShipCounter]
+        playerShipCounter += 1
+        
+        horizontalOrVerticle = random.randint(0, 1)
+        horitontal = 0
+        verticle = 1
+        if horizontalOrVerticle == horitontal:
+            playerGeneratedColumn2 = random.randint(0,(gridSizeQuestion - 1))
+            playerGeneratedRow2 = random.randint(0,(gridSizeQuestion - 2))
+        elif horizontalOrVerticle == verticle:
+            playerGeneratedColumn2 = random.randint(0,(gridSizeQuestion - 2))
+            playerGeneratedRow2 = random.randint(0,(gridSizeQuestion - 1))
 
-        elif playerShipCounter == 2:
-                horizontalOrVerticle = random.randint(0, 1)
-                horitontal = 0
-                verticle = 1
-                if horizontalOrVerticle == horitontal:
-                    playerGeneratedColumn = random.randint(0,(gridSizeQuestion - 1))
-                    playerGeneratedRow = random.randint(0,(gridSizeQuestion - 2))
+        for ship in range(2):
+            playerStartCoordinate = []
+            if horizontalOrVerticle == horitontal:
+                playerStartCoordinate.append(playerGeneratedRow2 + ship)
+                playerStartCoordinate.append(playerGeneratedColumn2)
+            elif horizontalOrVerticle == verticle:
+                playerStartCoordinate.append(playerGeneratedRow2)
+                playerStartCoordinate.append(playerGeneratedColumn2 + ship)
+            playerDestroyerCoordinate.append(playerStartCoordinate)
+        playerShipNamesList.append("destroyer")
+        playerStartCoordinatesList.append(playerDestroyerCoordinate)
 
-                elif horizontalOrVerticle == verticle:
-                    playerGeneratedColumn = random.randint(0,(gridSizeQuestion - 2))
-                    playerGeneratedRow = random.randint(0,(gridSizeQuestion - 1))
+        overlap = False
+        if playerDinghyStartCoordinate == playerDestroyerCoordinate[0] or playerDinghyStartCoordinate == playerDestroyerCoordinate[1]:
+            overlap = True
 
-                for x in range(2):
-                    playerStartCoordinate = []
-                    if horizontalOrVerticle == horitontal:
-                        playerStartCoordinate.append(playerGeneratedRow + x)
-                        playerStartCoordinate.append(playerGeneratedColumn)
+        if overlap == False:
+            break
 
-                    elif horizontalOrVerticle == verticle:
-                        playerStartCoordinate.append(playerGeneratedRow)
-                        playerStartCoordinate.append(playerGeneratedColumn + x)
-                    playerDestroyerCoordinate.append(playerStartCoordinate)
-                playerShipNamesList.append("destroyer")
-                playerStartCoordinatesList.append(playerDestroyerCoordinate)
+    playerGameBoard[playerStartCoordinatesList[0][0]][playerStartCoordinatesList[0][1]] = "X"
+    letter = chr(65 + playerStartCoordinatesList[0][0])
+    number = playerStartCoordinatesList[0][1] + 1
+    playerCoordinate = f"{letter}{number}"
+    playerShipLocationCoordinatesList.append(playerCoordinate)
+    print(f"\nPlayer dinghy was placed at {playerCoordinate}")
 
-    print(playerStartCoordinatesList)
-    print(playerShipNamesList)
-
-
-    if playerGameBoard[playerStartCoordinatesList[0][0]][playerStartCoordinatesList[0][1]] == 0:
-        playerGameBoard[playerStartCoordinatesList[0][0]][playerStartCoordinatesList[0][1]] = "X"
-        letter = chr(65 + playerStartCoordinatesList[0][0])
-        number = playerStartCoordinatesList[0][1] + 1
-        playerCoordinate = f"{letter}{number}"
-        playerShipLocationCoordinatesList.append(playerCoordinate)
-        print(f"\nPlayer dignhy was placed at {playerCoordinate}")
-
-    if playerGameBoard[playerStartCoordinatesList[1][0][0]][playerStartCoordinatesList[1][0][1]] == 0 and playerGameBoard[playerStartCoordinatesList[1][1][0]][playerStartCoordinatesList[1][1][1]] == 0:
-        playerGameBoard[playerStartCoordinatesList[1][0][0]][playerStartCoordinatesList[1][0][1]] = "X"
-        playerGameBoard[playerStartCoordinatesList[1][1][0]][playerStartCoordinatesList[1][1][1]] = "X"
-        letter1 = chr(65 + playerStartCoordinatesList[1][0][0])
-        number1 = playerStartCoordinatesList[1][0][1] + 1
-        letter2 = chr(65 + playerStartCoordinatesList[1][1][0])
-        number2 = playerStartCoordinatesList[1][1][1] + 1
-        playerCoordinate1 = f"{letter1}{number1}"
-        playerCoordinate2 = f"{letter2}{number2}"
-        playerShipLocationCoordinatesList.append(playerCoordinate1)
-        playerShipLocationCoordinatesList.append(playerCoordinate2)
-        print(f"\nPlayer destroyer was placed at {playerCoordinate1} and {playerCoordinate2}")
-
-
+    playerGameBoard[playerStartCoordinatesList[1][0][0]][playerStartCoordinatesList[1][0][1]] = "X"
+    playerGameBoard[playerStartCoordinatesList[1][1][0]][playerStartCoordinatesList[1][1][1]] = "X"
+    letter1 = chr(65 + playerStartCoordinatesList[1][0][0])
+    number1 = playerStartCoordinatesList[1][0][1] + 1
+    letter2 = chr(65 + playerStartCoordinatesList[1][1][0])
+    number2 = playerStartCoordinatesList[1][1][1] + 1
+    playerCoordinate1 = f"{letter1}{number1}"
+    playerCoordinate2 = f"{letter2}{number2}"
+    playerShipLocationCoordinatesList.append(playerCoordinate1)
+    playerShipLocationCoordinatesList.append(playerCoordinate2)
+    print(f"Player destroyer was placed at {playerCoordinate1} and {playerCoordinate2}")
 
     computerPossibleShipsList = [None, "dinghy", "destroyer"]
     computerShipCounter = 0
     computerStartCoordinatesList = []
     computerShipNamesList = []
 
+    while True:
+        computerShipCounter = 0
+        computerStartCoordinatesList = []
+        computerShipNamesList = []
 
-    for ship in range(2):
         computerShipName = computerPossibleShipsList[computerShipCounter]
         computerShipCounter += 1
         computerDestroyerCoordinate = []
 
+        computerGeneratedColumn = random.randint(0,(gridSizeQuestion - 1))
+        computerGeneratedRow = random.randint(0,(gridSizeQuestion - 1))
+        computerDinghyStartCoordinate = []
+        computerDinghyStartCoordinate.append(computerGeneratedRow)
+        computerDinghyStartCoordinate.append(computerGeneratedColumn)
+        computerStartCoordinatesList.append(computerDinghyStartCoordinate)
+        computerShipNamesList.append("dinghy")
 
-        if computerShipCounter == 1:
-            computerGeneratedColumn = random.randint(0,(gridSizeQuestion - 1))
-            computerGeneratedRow = random.randint(0,(gridSizeQuestion - 1))
-            computerDinghyStartCoordinate = []
-            computerDinghyStartCoordinate.append(computerGeneratedRow)
-            computerDinghyStartCoordinate.append(computerGeneratedColumn)
-            computerStartCoordinatesList.append(computerDinghyStartCoordinate)
-            computerShipNamesList.append("dinghy")
+        computerShipName = computerPossibleShipsList[computerShipCounter]
+        computerShipCounter += 1
+        
+        horizontalOrVerticle = random.randint(0, 1)
+        horitontal = 0
+        verticle = 1
+        if horizontalOrVerticle == horitontal:
+            computerGeneratedColumn2 = random.randint(0,(gridSizeQuestion - 1))
+            computerGeneratedRow2 = random.randint(0,(gridSizeQuestion - 2))
+        elif horizontalOrVerticle == verticle:
+            computerGeneratedColumn2 = random.randint(0,(gridSizeQuestion - 2))
+            computerGeneratedRow2 = random.randint(0,(gridSizeQuestion - 1))
 
-        elif computerShipCounter == 2:
-                horizontalOrVerticle = random.randint(0, 1)
-                horitontal = 0
-                verticle = 1
-                if horizontalOrVerticle == horitontal:
-                    computerGeneratedColumn = random.randint(0,(gridSizeQuestion - 1))
-                    computerGeneratedRow = random.randint(0,(gridSizeQuestion - 2))
+        for ship in range(2):
+            computerStartCoordinate = []
+            if horizontalOrVerticle == horitontal:
+                computerStartCoordinate.append(computerGeneratedRow2 + ship)
+                computerStartCoordinate.append(computerGeneratedColumn2)
+            elif horizontalOrVerticle == verticle:
+                computerStartCoordinate.append(computerGeneratedRow2)
+                computerStartCoordinate.append(computerGeneratedColumn2 + ship)
+            computerDestroyerCoordinate.append(computerStartCoordinate)
+        computerShipNamesList.append("destroyer")
+        computerStartCoordinatesList.append(computerDestroyerCoordinate)
 
-                elif horizontalOrVerticle == verticle:
-                    computerGeneratedColumn = random.randint(0,(gridSizeQuestion - 2))
-                    computerGeneratedRow = random.randint(0,(gridSizeQuestion - 1))
+        overlap = False
+        if computerDinghyStartCoordinate == computerDestroyerCoordinate[0] or computerDinghyStartCoordinate == computerDestroyerCoordinate[1]:
+            overlap = True
 
-                for x in range(2):
-                    computerStartCoordinate = []
-                    if horizontalOrVerticle == horitontal:
-                        computerStartCoordinate.append(computerGeneratedRow + x)
-                        computerStartCoordinate.append(computerGeneratedColumn)
+        if overlap == False:
+            break
 
-                    elif horizontalOrVerticle == verticle:
-                        computerStartCoordinate.append(computerGeneratedRow)
-                        computerStartCoordinate.append(computerGeneratedColumn + x)
-                    computerDestroyerCoordinate.append(computerStartCoordinate)
-                computerShipNamesList.append("destroyer")
-                computerStartCoordinatesList.append(computerDestroyerCoordinate)
-
-    print(computerStartCoordinatesList)
-    print(computerShipNamesList)
-
-
-    if computerGameBoard[computerStartCoordinatesList[0][0]][computerStartCoordinatesList[0][1]] == 0:
-        computerGameBoard[computerStartCoordinatesList[0][0]][computerStartCoordinatesList[0][1]] = "X"
-        letter = chr(65 + computerStartCoordinatesList[0][0])
-        number = computerStartCoordinatesList[0][1] + 1
-        computerCoordinate = f"{letter}{number}"
-        computerShipLocationCoordinatesList.append(computerCoordinate)
-        print(f"\nComputer dignhy was placed at {computerCoordinate}")
-
-    if computerGameBoard[computerStartCoordinatesList[1][0][0]][computerStartCoordinatesList[1][0][1]] == 0 and computerGameBoard[computerStartCoordinatesList[1][1][0]][computerStartCoordinatesList[1][1][1]] == 0:
-        computerGameBoard[computerStartCoordinatesList[1][0][0]][computerStartCoordinatesList[1][0][1]] = "X"
-        computerGameBoard[computerStartCoordinatesList[1][1][0]][computerStartCoordinatesList[1][1][1]] = "X"
-        letter1 = chr(65 + computerStartCoordinatesList[1][0][0])
-        number1 = computerStartCoordinatesList[1][0][1] + 1
-        letter2 = chr(65 + computerStartCoordinatesList[1][1][0])
-        number2 = computerStartCoordinatesList[1][1][1] + 1
-        computerCoordinate1 = f"{letter1}{number1}"
-        computerCoordinate2 = f"{letter2}{number2}"
-        computerShipLocationCoordinatesList.append(computerCoordinate1)
-        computerShipLocationCoordinatesList.append(computerCoordinate2)
-        print(f"\nComputer destroyer was placed at {computerCoordinate1} and {computerCoordinate2}")
-
+    letter = chr(65 + computerStartCoordinatesList[0][0])
+    number = computerStartCoordinatesList[0][1] + 1
+    computerCoordinate = f"{letter}{number}"
+    computerShipLocationCoordinatesList.append(computerCoordinate)
+    
+    letter1 = chr(65 + computerStartCoordinatesList[1][0][0])
+    number1 = computerStartCoordinatesList[1][0][1] + 1
+    letter2 = chr(65 + computerStartCoordinatesList[1][1][0])
+    number2 = computerStartCoordinatesList[1][1][1] + 1
+    computerCoordinate1 = f"{letter1}{number1}"
+    computerCoordinate2 = f"{letter2}{number2}"
+    computerShipLocationCoordinatesList.append(computerCoordinate1)
+    computerShipLocationCoordinatesList.append(computerCoordinate2)
+    
     print("\n== PLAYER BOARD ==")
     printboard(playerGameBoard)
+    
     print("\n== COMPUTER BOARD ==")
     printboard(computerGameBoard)
 
@@ -193,44 +188,60 @@ if __name__ == "__main__":
     computerGuesslist = []
 
     while True:
-        playerGuess = input("\nEnter guess to hit a battleship letter for row and numbers for columns (ex. A3): ").upper().strip()
+        playerGuess = input("\nEnter guess to hit a battleship letter for row and numbers for columns (ex. A3): ").upper().strip()    
         
+        length = 2
         if len(playerGuess) == 3 and playerGuess[1:].isdigit():
             if int(playerGuess[1:]) == 10:
                 length = 3
-            else:
-                length = 2
-        else:
-            length = 2
 
         if playerGuess in playerGuesslist:
             print("PICK ANOTHER SPOT. ")
             continue
 
-        if len(playerGuess) == length and playerGuess[0] in letters and playerGuess[1:].isdigit() and int(playerGuess[1:]) in numbers:
-            letterchangerrows = {"A" : 0 , "B" : 1 , "C" : 2 , "D" : 3 , "E" : 4 , "F" : 5 , "G" : 6 , "H" : 7 , "I" : 8 , "J" : 9}
-            playerRowchanger = letterchangerrows[playerGuess[0]]
+        rungame = False
+        if len(playerGuess) == length:
+            conversion = ord(playerGuess[0])
+            if conversion >= 65 and conversion < (65 + gridSizeQuestion):
+                if playerGuess[1:].isdigit():
+                    if int(playerGuess[1:]) >= 1 and int(playerGuess[1:]) <= gridSizeQuestion:
+                        rungame = True
+
+        if rungame == True:
+            playerRowchanger = ord(playerGuess[0]) - 65
             playerColumnchanger = (int(playerGuess[1:]) - 1)
-
             playerGuesslist.append(playerGuess)
-
+            
             while True:
                 computerGuessColumn = random.randint(0, (gridSizeQuestion - 1))
                 computerGuessRow = random.randint(0, (gridSizeQuestion - 1))
-                computerGuess = f"{letters[computerGuessRow]}{computerGuessColumn + 1}"
+                compterletter = chr(65 + computerGuessRow)
+                computernum = computerGuessColumn + 1
+                computerGuess = f"{compterletter}{computernum}"
                 if computerGuess in computerGuesslist:
                     continue 
                 elif computerGuess not in computerGuesslist:
                     computerGuesslist.append(computerGuess)
                     break
-
+                    
             if playerGuess in computerShipLocationCoordinatesList:
                 computerGameBoard[playerRowchanger][playerColumnchanger] = "H"
-                if playerGuess == computerShipLocationCoordinatesList[0]:
-                    print("YOU HIT & SUNK THE COMPUTER DINGHY.\n")
-                elif playerGuess in computerShipLocationCoordinatesList[1:]:
-                    print("YOU HIT THE COMPUTER DESTROYER.\n")
+                print("HIT!")
                 
+                if playerGuess == computerShipLocationCoordinatesList[0]:
+                    print("You sank a dinghy!\n")
+                elif playerGuess in computerShipLocationCoordinatesList[1:]:
+                    destroyership = True
+                    for targetcoor in computerShipLocationCoordinatesList[1:]:
+                        if targetcoor not in playerGuesslist:
+                             destroyership = False
+                    if destroyership == True:
+                        print("You sank a destroyer!\n")
+                    else:
+                        print("YOU HIT THE COMPUTER DESTROYER.\n")
+                
+                print("--- PLAYER BOARD ---")
+                printboard(playerGameBoard)
                 print("--- COMPUTER BOARD ---")
                 printboard(computerGameBoard)
                 
@@ -238,41 +249,52 @@ if __name__ == "__main__":
                 for targetcoor in computerShipLocationCoordinatesList:
                     if targetcoor not in playerGuesslist:
                         playerwin = False
-                
                 if playerwin == True:
                     print("You have sunk all ships. YOU WIN!")
                     break
-
             elif playerGuess not in computerShipLocationCoordinatesList:
                 print("YOU MISSED TRY AGAIN.\n")
                 computerGameBoard[playerRowchanger][playerColumnchanger] = "M"
+                print("--- PLAYER BOARD ---")
+                printboard(playerGameBoard)
                 print("--- COMPUTER BOARD ---")
                 printboard(computerGameBoard)
-
+                
             if computerGuess in playerShipLocationCoordinatesList:
-                playerGameBoard[computerGuessRow][computerGuessColumn] = "H"
+                if playerGameBoard[computerGuessRow][computerGuessColumn] == "X":
+                    playerGameBoard[computerGuessRow][computerGuessColumn] = "H"
+                print(f"CPU guessed {computerGuess}, HIT!")
                 if computerGuess == playerShipLocationCoordinatesList[0]:
-                    print("THE CPU HIT & SUNK YOUR DINGHY.\n")
+                    print("The computer sank your dinghy!\n")
                 elif computerGuess in playerShipLocationCoordinatesList[1:]:
-                    print("THE CPU HIT YOUR DESTROYER.\n")
+                    destroyership = True
+                    for targetcoor in playerShipLocationCoordinatesList[1:]:
+                        if targetcoor not in computerGuesslist:
+                            destroyership = False
+                    if destroyership == True:
+                        print("The computer sank your destroyer!\n")
+                    else:
+                        print("THE CPU HIT YOUR DESTROYER.\n")
                 
                 print("--- PLAYER BOARD ---")
                 printboard(playerGameBoard)
+                print("--- COMPUTER BOARD ---")
+                printboard(computerGameBoard)
                 
                 cpuwin = True
                 for targetcoor in playerShipLocationCoordinatesList:
                     if targetcoor not in computerGuesslist:
                         cpuwin = False
-                        
                 if cpuwin == True:
                     print("Computer has sunk all ships. YOU LOSE!")
                     break
-
             elif computerGuess not in playerShipLocationCoordinatesList:
-                print("CPU: MISSED \n")
-                playerGameBoard[computerGuessRow][computerGuessColumn] = "M"
+                print(f"The CPU fires at {computerGuess}... MISSED\n")
+                if playerGameBoard[computerGuessRow][computerGuessColumn] != "X":
+                    playerGameBoard[computerGuessRow][computerGuessColumn] = "M"
                 print("--- PLAYER BOARD ---")
                 printboard(playerGameBoard)
-
+                print("--- COMPUTER BOARD ---")
+                printboard(computerGameBoard)
         else:
-            print("Please retry with the proper format. ")
+            print("Invalid input format or out of bounds. Example format: A3")
