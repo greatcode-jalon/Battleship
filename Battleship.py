@@ -2,6 +2,21 @@
 
 import random
 
+def validation():
+    while True:
+            try:
+                gridSizeQuestion = int(input("Enter a number, 4-10, to define the size of the board (ex, 5 = 5x5 board): "))
+                if gridSizeQuestion in range(4,11):
+                    return gridSizeQuestion
+                    break
+                if gridSizeQuestion not in range(4,11):
+                    print("Please enter your board dimensions with a number 4-10. ")
+                    continue
+            except:
+                print("Please enter a number 4-10.")
+                continue
+
+
 def createBoard(gridSizeQuestion):
     columnRow = []
     for column in range(gridSizeQuestion):
@@ -72,23 +87,23 @@ def shipPlacement(gridSizeQuestion):
 
         return startCoordinatesList
 
+def win_checker(shipLocationCoordinatesList, guesslist):
+    for targetcoor in shipLocationCoordinatesList:
+        if targetcoor not in guesslist:
+            return False
+    return True
+
+
 
 
 if __name__ == "__main__":
     playerShipLocationCoordinatesList = []
     computerShipLocationCoordinatesList = []
 
-    while True:
-        try:
-            gridSizeQuestion = int(input("Enter a number, 4-10, to define the size of the board (ex, 5 = 5x5 board): "))
-            if gridSizeQuestion in range(4,11):
-                break
-            if gridSizeQuestion not in range(4,11):
-                print("Please enter your board dimensions with a number 4-10. ")
-                continue
-        except:
-            print("Please enter a number 4-10.")
-            continue
+    gridSizeQuestion = validation()
+
+    playerGameBoard = createBoard(gridSizeQuestion)
+    computerGameBoard = createBoard(gridSizeQuestion)
 
     playerGameBoard = createBoard(gridSizeQuestion)
     computerGameBoard = createBoard(gridSizeQuestion)
@@ -113,10 +128,6 @@ if __name__ == "__main__":
     playerShipLocationCoordinatesList.append(playerCoordinate1)
     playerShipLocationCoordinatesList.append(playerCoordinate2)
     print(f"Player destroyer was placed at {playerCoordinate1} and {playerCoordinate2}")
-
-
-
-
 
     letter = chr(65 + computerStartCoordinatesList[0][0])
     number = computerStartCoordinatesList[0][1] + 1
@@ -199,13 +210,11 @@ if __name__ == "__main__":
                 print("--- COMPUTER BOARD ---")
                 printboard(computerGameBoard)
                 
-                playerwin = True
-                for targetcoor in computerShipLocationCoordinatesList:
-                    if targetcoor not in playerGuesslist:
-                        playerwin = False
+                playerwin = win_checker(computerShipLocationCoordinatesList, playerGuesslist)
                 if playerwin == True:
                     print("You have sunk all ships. YOU WIN!")
                     break
+
             elif playerGuess not in computerShipLocationCoordinatesList:
                 print("YOU MISSED TRY AGAIN.\n")
                 computerGameBoard[playerRowchanger][playerColumnchanger] = "M"
@@ -235,10 +244,7 @@ if __name__ == "__main__":
                 print("--- COMPUTER BOARD ---")
                 printboard(computerGameBoard)
                 
-                cpuwin = True
-                for targetcoor in playerShipLocationCoordinatesList:
-                    if targetcoor not in computerGuesslist:
-                        cpuwin = False
+                cpuwin = win_checker(playerShipLocationCoordinatesList, computerGuesslist)
                 if cpuwin == True:
                     print("Computer has sunk all ships. YOU LOSE!")
                     break
