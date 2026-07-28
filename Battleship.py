@@ -8,7 +8,6 @@ def validation():
                 gridSizeQuestion = int(input("Enter a number, 4-10, to define the size of the board (ex, 5 = 5x5 board): "))
                 if gridSizeQuestion in range(4,11):
                     return gridSizeQuestion
-                    break
                 if gridSizeQuestion not in range(4,11):
                     print("Please enter your board dimensions with a number 4-10. ")
                     continue
@@ -16,6 +15,30 @@ def validation():
                 print("Please enter a number 4-10.")
                 continue
 
+def validateInput(gridSizeQuestion, playerGuess, computerGameBoard):
+    length = 2
+    if len(playerGuess) == 3 and playerGuess[1:].isdigit():
+        if int(playerGuess[1:]) == 10:
+            length = 3
+
+    rungame = False
+    if len(playerGuess) == length:
+        conversion = ord(playerGuess[0])
+        if conversion >= 65 and conversion < (65 + gridSizeQuestion):
+            if playerGuess[1:].isdigit():
+                if int(playerGuess[1:]) >= 1 and int(playerGuess[1:]) <= gridSizeQuestion:
+                    rungame = True
+
+    if rungame == True:
+        playerRowchanger = ord(playerGuess[0]) - 65
+        playerColumnchanger = (int(playerGuess[1:]) - 1)
+        if computerGameBoard[playerRowchanger][playerColumnchanger] in ["H", "M"]:
+            print("PICK ANOTHER SPOT. ")
+            return False
+
+        return True
+    else:
+        return False
 
 def createBoard(gridSizeQuestion):
     columnRow = []
@@ -96,8 +119,6 @@ def win_checker(shipLocationCoordinatesList, gameboard):
     return True
 
 
-
-
 if __name__ == "__main__":
     playerShipLocationCoordinatesList = []
     computerShipLocationCoordinatesList = []
@@ -149,109 +170,93 @@ if __name__ == "__main__":
     print("\n== COMPUTER BOARD ==")
     printboard(computerGameBoard)
 
-
     while True:
         playerGuess = input("\nEnter guess to hit a battleship letter for row and numbers for columns (ex. A3): ").upper().strip()    
-        
-        length = 2
-        if len(playerGuess) == 3 and playerGuess[1:].isdigit():
-            if int(playerGuess[1:]) == 10:
-                length = 3
 
-        rungame = False
-        if len(playerGuess) == length:
-            conversion = ord(playerGuess[0])
-            if conversion >= 65 and conversion < (65 + gridSizeQuestion):
-                if playerGuess[1:].isdigit():
-                    if int(playerGuess[1:]) >= 1 and int(playerGuess[1:]) <= gridSizeQuestion:
-                        rungame = True
+        if not validateInput(gridSizeQuestion, playerGuess, computerGameBoard):
+            print("\nInvalid input format or out of bounds. Example format: A3")
+            continue
 
-        if rungame == True:
-            playerRowchanger = ord(playerGuess[0]) - 65
-            playerColumnchanger = (int(playerGuess[1:]) - 1)
-            if computerGameBoard[playerRowchanger][playerColumnchanger] in ["H", "M"]:
-                print("PICK ANOTHER SPOT. ")
+        while True:
+            computerGuessColumn = random.randint(0, (gridSizeQuestion - 1))
+            computerGuessRow = random.randint(0, (gridSizeQuestion - 1))
+            compterletter = chr(65 + computerGuessRow)
+            computernum = computerGuessColumn + 1
+            computerGuess = f"{compterletter}{computernum}"
+            if playerGameBoard[computerGuessRow][computerGuessColumn] in ["H", "M"]:
                 continue
-            
-            while True:
-                computerGuessColumn = random.randint(0, (gridSizeQuestion - 1))
-                computerGuessRow = random.randint(0, (gridSizeQuestion - 1))
-                compterletter = chr(65 + computerGuessRow)
-                computernum = computerGuessColumn + 1
-                computerGuess = f"{compterletter}{computernum}"
-                if playerGameBoard[computerGuessRow][computerGuessColumn] in ["H", "M"]:
-                    continue
-                else:
-                    break
-                    
-            if playerGuess in computerShipLocationCoordinatesList:
-                computerGameBoard[playerRowchanger][playerColumnchanger] = "H"
-                print("HIT!")
-                
-                if playerGuess == computerShipLocationCoordinatesList[0]:
-                    print("You sank a dinghy!\n")
-                elif playerGuess in computerShipLocationCoordinatesList[1:]:
-                    destroyership = True
-                    for targetcoor in computerShipLocationCoordinatesList[1:]:
-                        row = ord(targetcoor[0]) - 65
-                        col = int(targetcoor[1:]) - 1
-                        if computerGameBoard[row][col] != "H":
-                             destroyership = False
-                    if destroyership == True:
-                        print("You sank a destroyer!\n")
-                    else:
-                        print("YOU HIT THE COMPUTER DESTROYER.\n")
-                
-                print("--- PLAYER BOARD ---")
-                printboard(playerGameBoard)
-                print("--- COMPUTER BOARD ---")
-                printboard(computerGameBoard)
-                
-                if win_checker(computerShipLocationCoordinatesList, computerGameBoard) == True:
-                    print("You have sunk all ships. YOU WIN!")
-                    break
+            else:
+                break
 
-            elif playerGuess not in computerShipLocationCoordinatesList:
-                print("YOU MISSED TRY AGAIN.\n")
-                computerGameBoard[playerRowchanger][playerColumnchanger] = "M"
-                print("--- PLAYER BOARD ---")
-                printboard(playerGameBoard)
-                print("--- COMPUTER BOARD ---")
-                printboard(computerGameBoard)
-                
-            if computerGuess in playerShipLocationCoordinatesList:
-                if playerGameBoard[computerGuessRow][computerGuessColumn] == "X":
-                    playerGameBoard[computerGuessRow][computerGuessColumn] = "H"
-                print(f"CPU guessed {computerGuess}, HIT!")
-                if computerGuess == playerShipLocationCoordinatesList[0]:
-                    print("The computer sank your dinghy!\n")
-                elif computerGuess in playerShipLocationCoordinatesList[1:]:
-                    destroyership = True
-                    for targetcoor in playerShipLocationCoordinatesList[1:]:
-                        row = ord(targetcoor[0]) - 65
-                        col = int(targetcoor[1:]) - 1
-                        if playerGameBoard[row][col] != "H":
+        playerRowchanger = ord(playerGuess[0]) - 65
+        playerColumnchanger = (int(playerGuess[1:]) - 1)
+        
+        if playerGuess in computerShipLocationCoordinatesList:
+            computerGameBoard[playerRowchanger][playerColumnchanger] = "H"
+            print("HIT!")
+            
+            if playerGuess == computerShipLocationCoordinatesList[0]:
+                print("You sank a dinghy!\n")
+            elif playerGuess in computerShipLocationCoordinatesList[1:]:
+                destroyership = True
+                for targetcoor in computerShipLocationCoordinatesList[1:]:
+                    row = ord(targetcoor[0]) - 65
+                    col = int(targetcoor[1:]) - 1
+                    if computerGameBoard[row][col] != "H":
                             destroyership = False
-                    if destroyership == True:
-                        print("The computer sank your destroyer!\n")
-                    else:
-                        print("THE CPU HIT YOUR DESTROYER.\n")
-                
-                print("--- PLAYER BOARD ---")
-                printboard(playerGameBoard)
-                print("--- COMPUTER BOARD ---")
-                printboard(computerGameBoard)
-                
-                if win_checker(playerShipLocationCoordinatesList, playerGameBoard) == True:
-                    print("Computer has sunk all ships. YOU LOSE!")
-                    break
-            elif computerGuess not in playerShipLocationCoordinatesList:
-                print(f"The CPU fires at {computerGuess}... MISSED\n")
-                if playerGameBoard[computerGuessRow][computerGuessColumn] != "X":
-                    playerGameBoard[computerGuessRow][computerGuessColumn] = "M"
-                print("--- PLAYER BOARD ---")
-                printboard(playerGameBoard)
-                print("--- COMPUTER BOARD ---")
-                printboard(computerGameBoard)
-        else:
-            print("Invalid input format or out of bounds. Example format: A3")
+                if destroyership == True:
+                    print("You sank a destroyer!\n")
+                else:
+                    print("YOU HIT THE COMPUTER DESTROYER.\n")
+            
+            print("--- PLAYER BOARD ---")
+            printboard(playerGameBoard)
+            print("--- COMPUTER BOARD ---")
+            printboard(computerGameBoard)
+            
+            if win_checker(computerShipLocationCoordinatesList, computerGameBoard) == True:
+                print("You have sunk all ships. YOU WIN!")
+                break
+
+        elif playerGuess not in computerShipLocationCoordinatesList:
+            print("YOU MISSED TRY AGAIN.\n")
+            computerGameBoard[playerRowchanger][playerColumnchanger] = "M"
+            print("--- PLAYER BOARD ---")
+            printboard(playerGameBoard)
+            print("--- COMPUTER BOARD ---")
+            printboard(computerGameBoard)
+            
+        if computerGuess in playerShipLocationCoordinatesList:
+            if playerGameBoard[computerGuessRow][computerGuessColumn] == "X":
+                playerGameBoard[computerGuessRow][computerGuessColumn] = "H"
+            print(f"CPU guessed {computerGuess}, HIT!")
+            if computerGuess == playerShipLocationCoordinatesList[0]:
+                print("The computer sank your dinghy!\n")
+            elif computerGuess in playerShipLocationCoordinatesList[1:]:
+                destroyership = True
+                for targetcoor in playerShipLocationCoordinatesList[1:]:
+                    row = ord(targetcoor[0]) - 65
+                    col = int(targetcoor[1:]) - 1
+                    if playerGameBoard[row][col] != "H":
+                        destroyership = False
+                if destroyership == True:
+                    print("The computer sank your destroyer!\n")
+                else:
+                    print("THE CPU HIT YOUR DESTROYER.\n")
+            
+            print("--- PLAYER BOARD ---")
+            printboard(playerGameBoard)
+            print("--- COMPUTER BOARD ---")
+            printboard(computerGameBoard)
+            
+            if win_checker(playerShipLocationCoordinatesList, playerGameBoard) == True:
+                print("Computer has sunk all ships. YOU LOSE!")
+                break
+        elif computerGuess not in playerShipLocationCoordinatesList:
+            print(f"The CPU fires at {computerGuess}... MISSED\n")
+            if playerGameBoard[computerGuessRow][computerGuessColumn] != "X":
+                playerGameBoard[computerGuessRow][computerGuessColumn] = "M"
+            print("--- PLAYER BOARD ---")
+            printboard(playerGameBoard)
+            print("--- COMPUTER BOARD ---")
+            printboard(computerGameBoard)
