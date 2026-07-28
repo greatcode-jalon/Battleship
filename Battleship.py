@@ -2,7 +2,7 @@
 
 import random
 
-def createBoard():
+def createBoard(gridSizeQuestion):
     columnRow = []
     for column in range(gridSizeQuestion):
         boardRow = []
@@ -17,6 +17,62 @@ def printboard(board):
         for number in row:
             print(number, end="\t")
     print()
+
+def shipPlacement(gridSizeQuestion):
+        shipCounter = 0
+        startCoordinatesList = []
+        shipNamesList = []
+
+        while True:
+            shipCounter = 0
+            startCoordinatesList = []
+            shipNamesList = []
+
+            shipCounter += 1
+            destroyerCoordinates = []
+
+            generatedColumn = random.randint(0,(gridSizeQuestion - 1))
+            generatedRow = random.randint(0,(gridSizeQuestion - 1))
+            dinghyStartCoordinates = []
+            dinghyStartCoordinates.append(generatedRow)
+            dinghyStartCoordinates.append(generatedColumn)
+            startCoordinatesList.append(dinghyStartCoordinates)
+            shipNamesList.append("dinghy")
+
+            shipCounter += 1
+            
+            horizontalOrVerticle = random.randint(0, 1)
+            horitontal = 0
+            verticle = 1
+            if horizontalOrVerticle == horitontal:
+                generatedColumn2 = random.randint(0,(gridSizeQuestion - 1))
+                generatedRow2 = random.randint(0,(gridSizeQuestion - 2))
+            elif horizontalOrVerticle == verticle:
+                generatedColumn2 = random.randint(0,(gridSizeQuestion - 2))
+                generatedRow2 = random.randint(0,(gridSizeQuestion - 1))
+
+            for ship in range(2):
+                startCoordinate = []
+                if horizontalOrVerticle == horitontal:
+                    startCoordinate.append(generatedRow2 + ship)
+                    startCoordinate.append(generatedColumn2)
+                elif horizontalOrVerticle == verticle:
+                    startCoordinate.append(generatedRow2)
+                    startCoordinate.append(generatedColumn2 + ship)
+                destroyerCoordinates.append(startCoordinate)
+            shipNamesList.append("destroyer")
+            startCoordinatesList.append(destroyerCoordinates)
+
+            overlap = False
+            if dinghyStartCoordinates == destroyerCoordinates[0] or dinghyStartCoordinates == destroyerCoordinates[1]:
+                overlap = True
+
+            if overlap == False:
+                break
+
+        return startCoordinatesList
+
+
 
 if __name__ == "__main__":
     playerShipLocationCoordinatesList = []
@@ -34,62 +90,10 @@ if __name__ == "__main__":
             print("Please enter a number 4-10.")
             continue
 
-    playerGameBoard = createBoard()
-    computerGameBoard = createBoard()
-
-    playerPossibleShipsList = [None, "dinghy", "destroyer"]
-    playerShipCounter = 0
-    playerStartCoordinatesList = []
-    playerShipNamesList = []
-
-    while True:
-        playerShipCounter = 0
-        playerStartCoordinatesList = []
-        playerShipNamesList = []
-
-        playerShipName = playerPossibleShipsList[playerShipCounter]
-        playerShipCounter += 1
-        playerDestroyerCoordinate = []
-
-        playerGeneratedColumn = random.randint(0,(gridSizeQuestion - 1))
-        playerGeneratedRow = random.randint(0,(gridSizeQuestion - 1))
-        playerDinghyStartCoordinate = []
-        playerDinghyStartCoordinate.append(playerGeneratedRow)
-        playerDinghyStartCoordinate.append(playerGeneratedColumn)
-        playerStartCoordinatesList.append(playerDinghyStartCoordinate)
-        playerShipNamesList.append("dinghy")
-
-        playerShipName = playerPossibleShipsList[playerShipCounter]
-        playerShipCounter += 1
-        
-        horizontalOrVerticle = random.randint(0, 1)
-        horitontal = 0
-        verticle = 1
-        if horizontalOrVerticle == horitontal:
-            playerGeneratedColumn2 = random.randint(0,(gridSizeQuestion - 1))
-            playerGeneratedRow2 = random.randint(0,(gridSizeQuestion - 2))
-        elif horizontalOrVerticle == verticle:
-            playerGeneratedColumn2 = random.randint(0,(gridSizeQuestion - 2))
-            playerGeneratedRow2 = random.randint(0,(gridSizeQuestion - 1))
-
-        for ship in range(2):
-            playerStartCoordinate = []
-            if horizontalOrVerticle == horitontal:
-                playerStartCoordinate.append(playerGeneratedRow2 + ship)
-                playerStartCoordinate.append(playerGeneratedColumn2)
-            elif horizontalOrVerticle == verticle:
-                playerStartCoordinate.append(playerGeneratedRow2)
-                playerStartCoordinate.append(playerGeneratedColumn2 + ship)
-            playerDestroyerCoordinate.append(playerStartCoordinate)
-        playerShipNamesList.append("destroyer")
-        playerStartCoordinatesList.append(playerDestroyerCoordinate)
-
-        overlap = False
-        if playerDinghyStartCoordinate == playerDestroyerCoordinate[0] or playerDinghyStartCoordinate == playerDestroyerCoordinate[1]:
-            overlap = True
-
-        if overlap == False:
-            break
+    playerGameBoard = createBoard(gridSizeQuestion)
+    computerGameBoard = createBoard(gridSizeQuestion)
+    playerStartCoordinatesList = shipPlacement(gridSizeQuestion)
+    computerStartCoordinatesList = shipPlacement(gridSizeQuestion)
 
     playerGameBoard[playerStartCoordinatesList[0][0]][playerStartCoordinatesList[0][1]] = "X"
     letter = chr(65 + playerStartCoordinatesList[0][0])
@@ -110,59 +114,9 @@ if __name__ == "__main__":
     playerShipLocationCoordinatesList.append(playerCoordinate2)
     print(f"Player destroyer was placed at {playerCoordinate1} and {playerCoordinate2}")
 
-    computerPossibleShipsList = [None, "dinghy", "destroyer"]
-    computerShipCounter = 0
-    computerStartCoordinatesList = []
-    computerShipNamesList = []
 
-    while True:
-        computerShipCounter = 0
-        computerStartCoordinatesList = []
-        computerShipNamesList = []
 
-        computerShipName = computerPossibleShipsList[computerShipCounter]
-        computerShipCounter += 1
-        computerDestroyerCoordinate = []
 
-        computerGeneratedColumn = random.randint(0,(gridSizeQuestion - 1))
-        computerGeneratedRow = random.randint(0,(gridSizeQuestion - 1))
-        computerDinghyStartCoordinate = []
-        computerDinghyStartCoordinate.append(computerGeneratedRow)
-        computerDinghyStartCoordinate.append(computerGeneratedColumn)
-        computerStartCoordinatesList.append(computerDinghyStartCoordinate)
-        computerShipNamesList.append("dinghy")
-
-        computerShipName = computerPossibleShipsList[computerShipCounter]
-        computerShipCounter += 1
-        
-        horizontalOrVerticle = random.randint(0, 1)
-        horitontal = 0
-        verticle = 1
-        if horizontalOrVerticle == horitontal:
-            computerGeneratedColumn2 = random.randint(0,(gridSizeQuestion - 1))
-            computerGeneratedRow2 = random.randint(0,(gridSizeQuestion - 2))
-        elif horizontalOrVerticle == verticle:
-            computerGeneratedColumn2 = random.randint(0,(gridSizeQuestion - 2))
-            computerGeneratedRow2 = random.randint(0,(gridSizeQuestion - 1))
-
-        for ship in range(2):
-            computerStartCoordinate = []
-            if horizontalOrVerticle == horitontal:
-                computerStartCoordinate.append(computerGeneratedRow2 + ship)
-                computerStartCoordinate.append(computerGeneratedColumn2)
-            elif horizontalOrVerticle == verticle:
-                computerStartCoordinate.append(computerGeneratedRow2)
-                computerStartCoordinate.append(computerGeneratedColumn2 + ship)
-            computerDestroyerCoordinate.append(computerStartCoordinate)
-        computerShipNamesList.append("destroyer")
-        computerStartCoordinatesList.append(computerDestroyerCoordinate)
-
-        overlap = False
-        if computerDinghyStartCoordinate == computerDestroyerCoordinate[0] or computerDinghyStartCoordinate == computerDestroyerCoordinate[1]:
-            overlap = True
-
-        if overlap == False:
-            break
 
     letter = chr(65 + computerStartCoordinatesList[0][0])
     number = computerStartCoordinatesList[0][1] + 1
