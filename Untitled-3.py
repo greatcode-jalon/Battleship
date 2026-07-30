@@ -46,99 +46,58 @@ def printboard(board):
     print()
 
 def shipPlacement(gridSize):
-    while True:
-
-        while shipCounter:
-            horizontalOrVerticle = random.randint(0, 1)
-            horizontal = 0
-            verticle = 1
-
-        overlap = False
-
         shipCounter = 0
-        for length in range(5):
-            if shipCounter == 0:
-                shipLength = 2
-                shipCounter += 1
-                if horizontalOrVerticle == horizontal:
-                    generatedColumn = random.randint(0,(gridSize - 1))
-                    generatedRow = random.randint(0,(gridSize - shipLength))
-                elif horizontalOrVerticle == verticle:
-                    generatedColumn = random.randint(0,(gridSize - shipLength))
-                    generatedRow = random.randint(0,(gridSize - 1))
+        startCoordinatesList = []
+        shipNamesList = []
 
-            elif shipCounter == 1:
-                shipLength = 3
-                shipCounter += 1
-                if horizontalOrVerticle == horizontal:
-                    generatedColumn = random.randint(0,(gridSize - 1))
-                    generatedRow = random.randint(0,(gridSize - shipLength))
-                elif horizontalOrVerticle == verticle:
-                    generatedColumn = random.randint(0,(gridSize - shipLength))
-                    generatedRow = random.randint(0,(gridSize - 1))
+        while True:
+            shipCounter = 0
+            startCoordinatesList = []
+            shipNamesList = []
 
-            elif shipCounter == 2:
-                shipLength = 3
-                shipCounter += 1
-                if horizontalOrVerticle == horizontal:
-                    generatedColumn = random.randint(0,(gridSize - 1))
-                    generatedRow = random.randint(0,(gridSize - shipLength))
-                elif horizontalOrVerticle == verticle:
-                    generatedColumn = random.randint(0,(gridSize - shipLength))
-                    generatedRow = random.randint(0,(gridSize - 1))
+            shipCounter += 1
+            destroyerCoordinates = []
 
-            elif shipCounter == 3:
-                shipLength = 4
-                shipCounter += 1
-                if horizontalOrVerticle == horizontal:
-                    generatedColumn = random.randint(0,(gridSize - 1))
-                    generatedRow = random.randint(0,(gridSize - shipLength))
-                elif horizontalOrVerticle == verticle:
-                    generatedColumn = random.randint(0,(gridSize - shipLength))
-                    generatedRow = random.randint(0,(gridSize - 1))
+            generatedColumn = random.randint(0,(gridSize - 1))
+            generatedRow = random.randint(0,(gridSize - 1))
+            dinghyStartCoordinates = []
+            dinghyStartCoordinates.append(generatedRow)
+            dinghyStartCoordinates.append(generatedColumn)
+            startCoordinatesList.append(dinghyStartCoordinates)
+            shipNamesList.append("dinghy")
 
-            elif shipCounter == 4:
-                shipLength = 5
-                if horizontalOrVerticle == horizontal:
-                    generatedColumn = random.randint(0,(gridSize - 1))
-                    generatedRow = random.randint(0,(gridSize - shipLength))
-                elif horizontalOrVerticle == verticle:
-                    generatedColumn = random.randint(0,(gridSize - shipLength))
-                    generatedRow = random.randint(0,(gridSize - 1))
-
-        gameBoard = createBoard(gridSize)
-
-        cellState = 0
-
-        for cell in range(shipLength):
-            if horizontalOrVerticle == horizontal:
-                row = generatedRow + cell
-                column = generatedColumn
+            shipCounter += 1
+            
+            horizontalOrVerticle = random.randint(0, 1)
+            horitontal = 0
+            verticle = 1
+            if horizontalOrVerticle == horitontal:
+                generatedColumn2 = random.randint(0,(gridSize - 1))
+                generatedRow2 = random.randint(0,(gridSize - 2))
             elif horizontalOrVerticle == verticle:
-                row = generatedRow
-                column = generatedColumn + cell
+                generatedColumn2 = random.randint(0,(gridSize - 2))
+                generatedRow2 = random.randint(0,(gridSize - 1))
 
-            cellState += gameBoard[row][column]
+            for ship in range(2):
+                startCoordinate = []
+                if horizontalOrVerticle == horitontal:
+                    startCoordinate.append(generatedRow2 + ship)
+                    startCoordinate.append(generatedColumn2)
+                elif horizontalOrVerticle == verticle:
+                    startCoordinate.append(generatedRow2)
+                    startCoordinate.append(generatedColumn2 + ship)
+                destroyerCoordinates.append(startCoordinate)
+            shipNamesList.append("destroyer")
+            startCoordinatesList.append(destroyerCoordinates)
 
-        if cellState > 0:
-            overlap = True
-            break
+            overlap = False
+            if dinghyStartCoordinates == destroyerCoordinates[0] or dinghyStartCoordinates == destroyerCoordinates[1]:
+                overlap = True
 
-        for cell in range(shipLength):
-            if horizontalOrVerticle == horizontal:
-                row = generatedRow + cell
-                column = generatedColumn
-            elif horizontalOrVerticle == verticle:
-                row = generatedRow
-                column = generatedColumn + cell
-            gameBoard[row][column] = 1
+            if overlap == False:
+                break
 
-
-        if not overlap:
-            return gameBoard
-
-
-
+        return startCoordinatesList
 
 def win_checker(shipLocationCoordinatesList, gameboard):
     for targetcoor in shipLocationCoordinatesList:
